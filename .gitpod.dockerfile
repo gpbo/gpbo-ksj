@@ -8,8 +8,10 @@ RUN apt-get update && apt-get install -yq \
         sudo \
         vim \
         curl \
-        ruby-full \
+        ruby-full
+        
 ## Docker ##
+RUN apt install \        
         docker.io \
         docker-compose
 
