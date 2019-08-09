@@ -24,3 +24,9 @@ ENV PATH=/home/linuxbrew/.linuxbrew/bin:$PATH
 
 ## Install branchout
 RUN brew install branchout/branchout/branchout hub shellcheck
+
+## Install skaffold
+RUN brew install skaffold
+
+## Install kubectl
+RUN brew install kubernetes-cli
