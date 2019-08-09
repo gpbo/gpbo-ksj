@@ -2,5 +2,7 @@ image:
   file: .gitpod.dockerfile
 tasks:
   - command: >
+      sudo systemctl start docker
+  - command: >
       branchout init &&
       branchout status

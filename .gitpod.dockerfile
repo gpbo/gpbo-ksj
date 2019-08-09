@@ -10,6 +10,11 @@ RUN apt-get update && apt-get install -yq \
         curl \
         ruby-full
 
+## Docker
+RUN apt-get install -yq \
+        docker.io \
+        docker-compose
+
 ## Create and run as gitpod user ###
 RUN useradd -l -u 33333 -G sudo -md /home/gitpod -s /bin/bash -p gitpod gitpod \
     # passwordless sudo for users in the 'sudo' group
