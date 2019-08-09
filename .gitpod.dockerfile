@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -yq \
         ruby-full
         
 ## Docker ##
-RUN apt install \        
+RUN apt install -yq \        
         docker.io \
         docker-compose
 
