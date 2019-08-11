@@ -11,6 +11,9 @@ RUN apt-get update && apt-get install -yq \
         locales \
         ruby-full
 
+## Set locales up right ##
+RUN update-locale LANG=en_US.UTF-8
+
 ## Create and run as gitpod user ##
 RUN useradd -l -u 33333 -G sudo -md /home/gitpod -s /bin/bash -p gitpod gitpod \
     ## Passwordless sudo for users in the 'sudo' group ##
@@ -18,10 +21,6 @@ RUN useradd -l -u 33333 -G sudo -md /home/gitpod -s /bin/bash -p gitpod gitpod \
 ENV HOME=/home/gitpod
 WORKDIR $HOME
 USER gitpod
-
-## Set locales up right ##
-ENV LC_ALL=en_US.UTF-8
-ENV LANG=en_US.UTF-8
 
 ## Install brew ##
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
