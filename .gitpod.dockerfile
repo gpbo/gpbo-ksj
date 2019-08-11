@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:buster
 
 ## Install base packages ##
 RUN apt-get update && apt-get install -yq \
