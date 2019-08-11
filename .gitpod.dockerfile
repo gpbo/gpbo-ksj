@@ -9,11 +9,12 @@ RUN apt-get update && apt-get install -yq \
         vim \
         curl \
         ruby-full
-        
-## Docker ##
-# RUN apt install -yq \        
-#        docker.io \
-#        docker-compose
+
+## Set locales up right ##
+RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment && \
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
+echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
+locale-gen en_US.UTF-8
 
 ## Create and run as gitpod user ##
 RUN useradd -l -u 33333 -G sudo -md /home/gitpod -s /bin/bash -p gitpod gitpod \
