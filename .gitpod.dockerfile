@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -yq \
         vim \
         curl \
         locales \
+        locales-all \
         ruby-full
 
 ## Set locales up right ##
