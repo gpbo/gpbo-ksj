@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -yq \
         sudo \
         vim \
         curl \
+        locales \
         ruby-full
 
 ## Create and run as gitpod user ##
