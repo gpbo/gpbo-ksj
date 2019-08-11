@@ -12,7 +12,9 @@ RUN apt-get update && apt-get install -yq \
         ruby-full
 
 ## Set locales up right ##
-RUN sudo update-locale LANG=en_US.UTF-8
+RUN update-locale "LANG=en_HK.UTF-8" && \
+locale-gen --purge "en_HK.UTF-8" && \
+dpkg-reconfigure --frontend noninteractive locales
 
 ## Create and run as gitpod user ##
 RUN useradd -l -u 33333 -G sudo -md /home/gitpod -s /bin/bash -p gitpod gitpod \
