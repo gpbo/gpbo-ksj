@@ -19,10 +19,7 @@ WORKDIR $HOME
 USER gitpod
 
 ## Set locales up right ##
-RUN sudo echo "LC_ALL=en_US.UTF-8" >> /etc/environment && \
-sudo echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
-sudo echo "LANG=en_US.UTF-8" >> /etc/locale.conf && \
-sudo locale-gen en_US.UTF-8
+RUN echo en_US.UTF-8 UTF-8 > /etc/locale.gen && locale-gen en_US.UTF-8
 
 ## Install brew ##
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
