@@ -11,9 +11,9 @@ RUN apt-get update && apt-get install -yq \
         ruby-full
         
 ## Docker ##
-RUN apt install -yq \        
-        docker.io \
-        docker-compose
+# RUN apt install -yq \        
+#        docker.io \
+#        docker-compose
 
 ## Create and run as gitpod user ##
 RUN useradd -l -u 33333 -G sudo -md /home/gitpod -s /bin/bash -p gitpod gitpod \
@@ -35,3 +35,6 @@ RUN brew install skaffold
 
 ## Install kubectl ##
 RUN brew install kubernetes-cli
+
+## Docker ##
+RUN brew install docker docker-compose
