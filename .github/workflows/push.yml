@@ -14,11 +14,38 @@ jobs:
         mkdir google-cloud-sdk
         wget -qO- https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-258.0.0-linux-x86_64.tar.gz | tar xz -C google-cloud-sdk
         ./google-cloud-sdk/google-cloud-sdk/install.sh
-    - name: Deploy to GCP
+
+        gcloud components install beta
+        gcloud components update
+    - name: Authenticate with GCP and build container and push to GCR
       run: |
         # Temporary path add
         PATH=$PATH:./google-cloud-sdk/google-cloud-sdk/bin
+
         # Log in to gcloud command with service account
         echo "$GCLOUD_AUTH" | base64 --decode > "$HOME"/gcloud.json
         sh -c "gcloud auth activate-service-account --key-file=$HOME/gcloud.json $*"
-        gcloud config set project mercito-test
+
+        # Set up gcloud docker
+        gcloud config set run/region $REGION_ID
+        gcloud auth configure-docker
+        gcloud components install docker-credential-gcr
+
+        # Build and push the docker container
+        docker build . --tag gcr.io/$PROJECT_ID/$IMAGE
+        docker push gcr.io/$PROJECT_ID/$IMAGE
+
+        # Verify it's running
+        gcloud container images list
+    - name: Authenticate with GCP and build container and push to GCR
+      run: |
+        gcloud beta run deploy $CLOUD_RUN_SVC \
+        --image gcr.io/$PROJECT_ID/$IMAGE \
+        --allow-unauthenticated
+        --quiet
+      env:
+        GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
+        PROJECT_ID: 'mercito-test'
+        REGION_ID: 'us-central1'
+        IMAGE: 'helloworld:v1'
+        CLOUD_RUN_SVC: 'helloworld'
