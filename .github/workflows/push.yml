@@ -1,0 +1,24 @@
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-and-deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Install dependencies
+      run: |
+        # Get Google Cloud SDK
+        mkdir google-cloud-sdk
+        wget -qO- https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-258.0.0-linux-x86_64.tar.gz | tar xz -C google-cloud-sdk
+        ./google-cloud-sdk/google-cloud-sdk/install.sh
+    - name: Deploy to GCP
+      run: |
+        # Temporary path add
+        PATH=$PATH:./google-cloud-sdk/google-cloud-sdk/bin
+        # Log in to gcloud command with service account
+        echo "$GCLOUD_AUTH" | base64 --decode > "$HOME"/gcloud.json
+        sh -c "gcloud auth activate-service-account --key-file=$HOME/gcloud.json $*"
+        gcloud config set project mercito-test
