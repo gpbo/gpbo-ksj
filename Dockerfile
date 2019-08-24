@@ -1,20 +1,23 @@
-# Use the official Node.js 10 image.
-# https://hub.docker.com/_/node
-FROM node:10
-
-# Create and change to the app directory.
-WORKDIR /usr/src/app
-
-# Copy application dependency manifests to the container image.
-# A wildcard is used to ensure both package.json AND package-lock.json are copied.
-# Copying this separately prevents re-running npm install on every code change.
-COPY package*.json ./
-
-# Install production dependencies.
-RUN npm install --only=production
+# Use the official maven/Java 8 image to create a build artifact.
+# https://hub.docker.com/_/maven
+FROM maven:3.5-jdk-8-alpine as builder
 
 # Copy local code to the container image.
-COPY . .
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+
+# Build a release artifact.
+RUN mvn package -DskipTests
+
+# Use AdoptOpenJDK for base image.
+# It's important to use OpenJDK 8u191 or above that has container support enabled.
+# https://hub.docker.com/r/adoptopenjdk/openjdk8
+# https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
+FROM adoptopenjdk/openjdk8:jdk8u202-b08-alpine-slim
+
+# Copy the jar to the production image from the builder stage.
+COPY --from=builder /app/target/helloworld-*.jar /helloworld.jar
 
 # Run the web service on container startup.
-CMD [ "npm", "start" ]
+CMD ["java","-Djava.security.egd=file:/dev/./urandom","-Dserver.port=${PORT}","-jar","/helloworld.jar"]
